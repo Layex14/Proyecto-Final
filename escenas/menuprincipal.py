@@ -20,19 +20,18 @@ class MenuPrincipal:
             sys.exit()
 
         #Variables de Play
-        recorte_jugar = (415, 65, 250, 110) 
+        recorte_jugar = (800, 150, 550, 300) 
         pos_x_jugar = (screenancho // 2) - 100  # Centrado horizontalmente aprox
         pos_y_jugar = 250
 
         #Variables de exit
-        recorte_salir = (690, 620, 250, 110)
+        recorte_salir = (1360, 880, 550, 300)
         pos_x_salir = (screenancho // 2) - 100
         pos_y_salir = 400
 
         #Recorte
-        self.boton_jugar = Boton(pos_x_jugar, pos_y_jugar, self.hoja_botones, recorte_jugar, escala=0.8)
-        self.boton_salir = Boton(pos_x_salir, pos_y_salir, self.hoja_botones, recorte_salir, escala=0.8)
-
+        self.boton_jugar = Boton(pos_x_jugar, pos_y_jugar, self.hoja_botones, recorte_jugar, escala=0.3)
+        self.boton_salir = Boton(pos_x_salir, pos_y_salir, self.hoja_botones, recorte_salir, escala=0.3)
 
         
 
@@ -53,12 +52,6 @@ class MenuPrincipal:
             self.screen.fill(blanco)
 
         if self.boton_jugar.draw(self.screen):
-            print("¡Juego Iniciado!")
             self.next_scene = "menu_principal" # Cámbialo a "juego" cuando tengas esa escena lista
-
-
-
         if self.boton_salir.draw(self.screen):
-            print("Saliendo del juego...")
-            pygame.quit()
-            sys.exit()
+            exit()
