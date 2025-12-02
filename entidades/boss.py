@@ -18,14 +18,15 @@ class Proyectile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=(x, y))
         self.floor_y = floor_y
 
-        #trayectoria (Creo)
+        #trayectoria
         dx = target_x - x
         dy = target_y - y
         angle = math.atan2(dy, dx)
 
 
         self.vel_x = math.cos(angle) * PROJECTILE_SPEED
-        self.vel_y = math.sin(angle) * PROJECTILE_SPEED - 5 
+        self.vel_y = math.sin(angle) * PROJECTILE_SPEED
+        self.vel_y -= 8
         self.landed = False
 
     def update(self):
@@ -159,7 +160,7 @@ class BossPancho(Entity):
             self.rect.x -= speed
         return False
 
-    def draw_projectile(self, surface):
-        """Método auxiliar para dibujar el proyectil si existe."""
+    def draw_projectile(self, surface,offset_x = 0):
         if self.projectile:
-            surface.blit(self.projectile.image, self.projectile.rect)
+            draw_rect = self.projectile.rect.move(-offset_x, 0)
+            surface.blit(self.projectile.image, draw_rect)

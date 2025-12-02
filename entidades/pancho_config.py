@@ -5,10 +5,10 @@ pancho_config = {
     "frame_height":100,
     "scale":3.5,
     "columns":8,
-    "cooldown": 100,
+    "cooldown": 110,
     "speed": 5,
     "start_x":100,
-    "start_y": 210-100,
+    "start_y": 210,
     "crop_bounds": (15, 0, 40, 15)
 }
 
@@ -20,13 +20,13 @@ pancho_definitions = {
 player_config = {
     "frame_width":80,
     "frame_height":80,
-    "scale":3,
+    "scale":4.5,
     "columns":8,
-    "cooldown": 40,
+    "cooldown": 100,
     "speed": 15,
     "start_x":300,
-    "start_y": 400-25,
-    "crop_bounds": (20, 10, 20, 30)
+    "start_y": 127*8,
+    "crop_bounds": (0, 10, 0, 30)
     
 }
 

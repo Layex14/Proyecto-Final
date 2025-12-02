@@ -14,7 +14,7 @@ class MenuPrincipal:
         
         try:
         #Fondo
-            self.fondo=pygame.image.load('recursos/imagenes/background1.png').convert_alpha()
+            self.fondo=pygame.image.load('recursos/imagenes/menu.png').convert_alpha()
             self.fondo = pygame.transform.scale(self.fondo, (screenancho, screenalto))
         #Hoja de ls botones
             self.hoja_botones=pygame.image.load('recursos/imagenes/hojadebotones.png').convert_alpha()
@@ -32,12 +32,12 @@ class MenuPrincipal:
         #Variables de Play
         recorte_jugar = (800, 150, 550, 300) 
         pos_x_jugar = (screenancho // 2) - 100  # Centrado horizontalmente aprox
-        pos_y_jugar = 250
+        pos_y_jugar = 350
 
         #Variables de exit
         recorte_salir = (1360, 880, 550, 300)
         pos_x_salir = (screenancho // 2) - 100
-        pos_y_salir = 400
+        pos_y_salir = 500
 
         #Recorte
         self.boton_jugar = Boton(pos_x_jugar, pos_y_jugar, self.hoja_botones, recorte_jugar, escala=0.3)
