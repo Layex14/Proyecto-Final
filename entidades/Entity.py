@@ -155,8 +155,8 @@ class Player(Entity):
             self.vertical_momentum += self.gravity
             
         #Limitar la Velocidad
-        if self.vertical_momentum > 15: 
-            self.vertical_momentum = 15
+        if self.vertical_momentum > 20: 
+            self.vertical_momentum = 20
             
         #Aplicar Movimiento
         self.rect.y += self.vertical_momentum
@@ -184,11 +184,17 @@ class Player(Entity):
             self.direction = "left"
             self.rect.x -= self.speed
             movement_applied = True
+            if keys[pygame.K_RIGHT]:
+                movement_applied = False
+                self.direction = 'right'
             
         if keys[pygame.K_RIGHT]:
             self.direction = "right"
             self.rect.x += self.speed
             movement_applied = True
+            if keys[pygame.K_LEFT]:
+                movement_applied = False
+                
             
         #Lógica de Estado
         if self.on_ground: 
@@ -206,7 +212,7 @@ class Player(Entity):
         if event.type != pygame.KEYDOWN:
             return
             
-        if event.key == pygame.K_x:
+        if event.key == pygame.K_z:
             current_time = pygame.time.get_ticks()
 
             #wombo combo
@@ -233,7 +239,7 @@ class Player(Entity):
             return
         
         
-        if self.on_ground and event.type == pygame.KEYDOWN and event.key == pygame.K_c:
+        if self.on_ground and event.type == pygame.KEYDOWN and event.key == pygame.K_x:
             self.on_ground = False
             self.jumping = True
             self.state = 'jump'
@@ -246,7 +252,7 @@ class Player(Entity):
             return
             
         
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_z:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
             current_time = pygame.time.get_ticks()
             
             self.dashing = True
