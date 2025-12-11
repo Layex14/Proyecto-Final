@@ -126,35 +126,31 @@ class Juego:
         current_time = pygame.time.get_ticks()
         #logic de intro
         if self.showing_intro:
-            # 1. Aparecer (Fade In)
             if self.intro_stage == "fade_in":
-                # Calculamos el progreso (0.0 a 1.0)
                 progress = (current_time - self.intro_timer) / self.DURATION_FADE_IN
                 if progress >= 1:
                     self.intro_alpha = 255
                     self.intro_stage = "hold"
-                    self.intro_timer = current_time # Reiniciamos timer para el hold
+                    self.intro_timer = current_time 
                 else:
                     self.intro_alpha = int(progress * 255)
 
-            # 2. Mantener (Hold)
             elif self.intro_stage == "hold":
                 self.intro_alpha = 255
                 if current_time - self.intro_timer > self.DURATION_HOLD:
                     self.intro_stage = "fade_out"
-                    self.intro_timer = current_time # Reiniciamos timer para el fade out
+                    self.intro_timer = current_time 
 
-            # 3. Desaparecer (Fade Out)
             elif self.intro_stage == "fade_out":
                 progress = (current_time - self.intro_timer) / self.DURATION_FADE_OUT
                 if progress >= 1:
                     self.intro_alpha = 0
-                    self.showing_intro = False # TERMINA LA INTRO, EMPIEZA EL JUEGO
+                    self.showing_intro = False 
                 else:
                     self.intro_alpha = 255 - int(progress * 255)
             
             self.camera.update()
-            return # Salimos del update aquí para no ejecutar la lógica de juego
+            return 
 
 
 
@@ -182,15 +178,27 @@ class Juego:
 
                         # Empuja
                         if self.pancho.rect.centerx < self.player.rect.centerx:
-                            self.player.rect.x += 200 #der
+                            self.player.rect.x += 900 #der
                         else:
-                            self.player.rect.x -= 200 #isq
+                            self.player.rect.x -= 900 #isq
 
+        
         if self.pancho.projectile and not self.pancho.projectile.landed:
-            if self.pancho.projectile.rect.colliderect(self.player.rect):
-                if self.player.damage(15): 
-                    self.pancho.projectile = None
-            
+
+            moneda_destruida = False 
+
+            if self.player.is_attacking:
+                sword_hitbox = self.player.attack_hitbox()
+                #parry (HAZLO KEVIN POR EL BENDITO)
+                if sword_hitbox:
+                    if sword_hitbox.colliderect(self.pancho.projectile.rect):
+                        
+                        self.pancho.projectile = None
+                        moneda_destruida = True
+            if not moneda_destruida and self.pancho.projectile:
+                if self.pancho.projectile.rect.colliderect(self.player.rect):
+                    if self.player.damage(15): 
+                        self.pancho.projectile = None
 
 
         if self.pancho.hp <= 0:

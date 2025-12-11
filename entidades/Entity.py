@@ -54,7 +54,7 @@ class Entity(pygame.sprite.Sprite):
         
         # Creacion de la primera imagen y el rect 
         self.image = self.get_image(initial_spritesheet_index)
-                
+
         self.rect = pygame.Rect(0, 0, self.hitbox_width, self.hitbox_height)
         self.image_offset_x = visual_config.get("image_offset_x", 0)
 
@@ -68,7 +68,7 @@ class Entity(pygame.sprite.Sprite):
         ### Detecta ataques de PJ o panchito
         if not self.is_attacking:
             return None
-        hitbox = pygame.Rect(0, 0, 140, 110)
+        hitbox = pygame.Rect(0, 0, 140, 150)
         if self.direction == "right":
             hitbox.midleft = self.rect.midright
         else:
