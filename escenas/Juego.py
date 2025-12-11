@@ -130,8 +130,23 @@ class Juego:
             self.screen.fill(blanco)
 
         for sprite in self.all_sprites: 
-            draw_rect = sprite.rect.move(-offset, 9)
-            self.screen.blit(sprite.image, draw_rect)
+            image_rect = sprite.image.get_rect()
+            
+            image_rect.midbottom = sprite.rect.midbottom 
+            
+            ajuste_visual = sprite.image_offset_x
+
+            if sprite.direction == "left":
+                ajuste_visual = -ajuste_visual
+
+            image_rect.x += ajuste_visual
+            
+            draw_pos = image_rect.move(-offset, 9)
+            
+            self.screen.blit(sprite.image, draw_pos)
+            
+            debug_rect = sprite.rect.move(-offset, 0)
+            pygame.draw.rect(self.screen, (255, 0, 0), debug_rect, 2)
             
             #Hitbox ataque
             # if hasattr(sprite, 'is_attacking') and sprite.is_attacking:

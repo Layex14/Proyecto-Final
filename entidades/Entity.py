@@ -26,6 +26,7 @@ class Entity(pygame.sprite.Sprite):
         self.columns = visual_config["columns"]
         self.cooldown = visual_config["cooldown"]
         self.speed = visual_config["speed"]
+        self.hitbox_width, self.hitbox_height= visual_config.get("hitbox_size")
 
         self.max_hp = visual_config.get("hp",100)
         self.hp = self.max_hp
@@ -52,8 +53,11 @@ class Entity(pygame.sprite.Sprite):
         
         # Creacion de la primera imagen y el rect 
         self.image = self.get_image(initial_spritesheet_index)
-        self.rect = self.image.get_rect() 
-        
+
+        self.rect=pygame.Rect(0, 0, self.hitbox_width, self.hitbox_height)
+
+        self.image_offset_x = visual_config.get("image_offset_x", 0)
+
         #posicion inicial
         self.rect.x = visual_config["start_x"]
         self.rect.y = visual_config["start_y"]
@@ -142,13 +146,11 @@ class Entity(pygame.sprite.Sprite):
     
     ##voltea la imagen
     def compensate(self):
-        current_midbottom = self.rect.midbottom
         
         should_flip = (self.direction == "left")
         self.image = pygame.transform.flip(self.image, should_flip, False)
         
-        self.rect = self.image.get_rect()
-        self.rect.midbottom = current_midbottom
+
         
 
     ## Detector de cambios de estado
