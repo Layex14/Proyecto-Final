@@ -4,9 +4,9 @@ from .Entity import Entity
 
 
 GRAVITY = 0.5
-PROJECTILE_SPEED = 20
-BOSS_SPEED = 3
-BOSS_DASH_SPEED = 20
+PROJECTILE_SPEED = 13
+BOSS_SPEED = 4
+BOSS_DASH_SPEED = 60
 ATTACK_RANGE_MELEE = 250 
 ATTACK_RANGE_RANGED = 900 
 COOLDOWN_ATTACK = 1000     
@@ -57,6 +57,9 @@ class BossPancho(Entity):
         self.projectile = None 
         self.ai_state = 'CHASE' 
         self.last_attack_time = 0
+
+        self.direction='left'
+        self.compensate()
 
     def attack_hitbox(self):
         """Calcula el área de daño del golpe melee de Pancho."""
