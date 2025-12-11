@@ -144,12 +144,9 @@ class Entity(pygame.sprite.Sprite):
             self.last_update = current_time 
             self.current_frame_in_animation += 1
             
-            # Si llegamos al final de la animación
             if self.current_frame_in_animation >= self.animation_duration:
-                # ### NUEVO: Avisamos que terminó el ciclo (Vital para el Boss)
                 self.animation_finished = True 
 
-                # Si es un ataque y termina la animación...
                 if self.is_attacking:
                     pass 
                 

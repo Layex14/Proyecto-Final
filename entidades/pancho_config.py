@@ -5,12 +5,12 @@ pancho_config = {
     "frame_height":100,
     "scale":3.5,
     "columns":8,
-    "cooldown": 110,
+    "cooldown": 100,
     "speed": 5,
     "start_x":100,
     "start_y": 240,
     "crop_bounds": (10, 0, 10, 15),
-    "hp":100,
+    "hp":10,
     "hitbox_size":(50,250),
     "image_offset_x": 0
 }

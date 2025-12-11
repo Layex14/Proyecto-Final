@@ -27,13 +27,13 @@ class Juego:
         self.floor_color = (43, 25, 40)
         
         self.showing_intro = True
-        self.intro_stage = "fade_in" # Estados: fade_in, hold, fade_out
-        self.intro_alpha = 0         # Transparencia (0 invisible, 255 visible)
+        self.intro_stage = "fade_in"
+        self.intro_alpha = 0    
         self.intro_timer = pygame.time.get_ticks()
         
         
         self.DURATION_FADE_IN = 1000
-        self.DURATION_HOLD = 1000    # Tiempo que el texto se queda quieto
+        self.DURATION_HOLD = 1000   
         self.DURATION_FADE_OUT = 1000
         
         
@@ -44,23 +44,35 @@ class Juego:
             self.font_boss_big = pygame.font.SysFont(None, 100)
             self.font_boss_sub = pygame.font.SysFont(None, 40)
             
-        # Renderizamos los textos una sola vez para optimizar
         self.text_name = self.font_boss_big.render("PANCHITO", True, (255, 255, 255))
         self.text_sub = self.font_boss_sub.render("EL ANTILOPE SABLE", True, (200, 200, 200))
         
-        # Centramos los textos en la pantalla
         self.rect_name = self.text_name.get_rect(center=(screenancho//2, screenalto//2 - 50))
         self.rect_sub = self.text_sub.get_rect(center=(screenancho//2, screenalto//2 + 20))
-        # carga de recursos
 
         try:
             self.escenario = pygame.image.load('recursos/imagenes/escenario.png').convert_alpha()
             
             self.malla_jugador=pygame.image.load("recursos/imagenes/player_sprites.png").convert_alpha()
             self.malla_pancho=pygame.image.load("recursos/imagenes/pancho_sprites.png").convert_alpha()
-            pygame.mixer.music.load('recursos/musica/Musicaboss.mp3')
-            pygame.mixer.music.play(-1, fade_ms=2000)
-            pygame.mixer.music.set_volume(0.4)
+            
+            try:
+                img_victoria_raw = pygame.image.load('recursos/imagenes/pingugu.png').convert_alpha()
+            except:
+                print("Advertencia: No se encontró 'recursos/imagenes/pingugu.png', usando placeholder.")
+                img_victoria_raw = pygame.Surface((200, 200))
+                img_victoria_raw.fill((0, 255, 0))
+
+            nuevo_tamano = (300, 300) 
+            self.imagen_victoria = pygame.transform.scale(img_victoria_raw, nuevo_tamano)
+            
+            self.rect_victoria = self.imagen_victoria.get_rect(center=(screenancho//2, screenalto//2 + 200))
+            pygame.mixer.music.load('recursos/musica/panchointro.wav')
+            pygame.mixer.music.play(0)
+            
+            self.MUSIC_END_EVENT = pygame.USEREVENT + 1 
+            
+            pygame.mixer.music.set_endevent(self.MUSIC_END_EVENT)
 
             self.ancho_escenario = self.escenario.get_width()
         except pygame.error as e:
@@ -106,6 +118,15 @@ class Juego:
 
     def handle_events(self, events):
         for event in events:
+            if event.type == self.MUSIC_END_EVENT:
+
+                pygame.mixer.music.set_endevent() 
+                
+                try:
+                    pygame.mixer.music.load('recursos/musica/panchobucle.wav')
+                    pygame.mixer.music.play(-1) 
+                except pygame.error as e:
+                    print(f"Error cargando musica bucle: {e}") 
             if event.type == pygame.KEYDOWN:
                 if event.key==pygame.K_ESCAPE:
                     self.next_scene="menu_principal"
@@ -146,6 +167,7 @@ class Juego:
                 if progress >= 1:
                     self.intro_alpha = 0
                     self.showing_intro = False 
+                    
                 else:
                     self.intro_alpha = 255 - int(progress * 255)
             
@@ -168,7 +190,7 @@ class Juego:
         if self.player.is_attacking:
             attack_box = self.player.attack_hitbox()
             if attack_box and attack_box.colliderect(self.pancho.rect):
-                self.pancho.damage(5)
+                self.pancho.damage(1)
         
         if self.pancho.state == 'attack': 
             boss_hitbox = self.pancho.attack_hitbox()
@@ -227,7 +249,6 @@ class Juego:
 
     def draw_text_with_alpha(self, surface, text_img, rect, alpha):
         """Función auxiliar para dibujar texto transparente"""
-        # Creamos una copia de la imagen del texto para ponerle alpha
         temp_surface = text_img.copy()
         temp_surface.set_alpha(alpha)
         surface.blit(temp_surface, rect)
@@ -286,7 +307,7 @@ class Juego:
             
             dark_overlay = pygame.Surface((self.screen.get_width(), self.screen.get_height()))
             dark_overlay.fill((0, 0, 0))
-            dark_overlay.set_alpha(100) # Oscuridad parcial
+            dark_overlay.set_alpha(100) 
             self.screen.blit(dark_overlay, (0, 0))
 
             # Dibujar Título y Subtítulo
@@ -298,34 +319,37 @@ class Juego:
                 line_width = 400
                 center_x = self.screen.get_width() // 2
                 line_y = self.rect_name.bottom - 10
-                # Línea que se desvanece con el texto
                 s = pygame.Surface((line_width, 2))
                 s.fill((255, 255, 255))
                 s.set_alpha(self.intro_alpha)
                 self.screen.blit(s, (center_x - line_width//2, line_y))
 
         if self.game_over:
-            # Capa oscura
             s = pygame.Surface((screenancho, screenalto))  
             s.set_alpha(128)                
             s.fill((0,0,0))           
             self.screen.blit(s, (0,0))
             
-            # Textos
             if self.victoria:
                 texto = "¡VICTORIA (el 7 profe)!"
                 color = (0, 255, 0)
                 instruccion = "Presiona ENTER para volver al Menú"
+
+                self.screen.blit(self.imagen_victoria, self.rect_victoria)
+            
+                cartel = self.font_grande.render(texto, True, color)
+                rect_cartel = cartel.get_rect(center=(screenancho//2, screenalto//2 ))
+                
+                subtitulo = self.font_chica.render(instruccion, True, (255, 255, 255))
+                rect_sub = subtitulo.get_rect(center=(screenancho//2, screenalto//2 + 520))
             else:
                 texto = "DERROTA"
                 color = (255, 0, 0)
                 instruccion = "Presiona ENTER para Reiniciar"
             
-            # Variables locales temporales para renderizar
             cartel = self.font_grande.render(texto, True, color)
             subtitulo = self.font_chica.render(instruccion, True, (255, 255, 255))
 
-            # Centrar
             rect_cartel = cartel.get_rect(center=(screenancho//2, screenalto//2 - 50))
             rect_sub = subtitulo.get_rect(center=(screenancho//2, screenalto//2 + 20))
 
